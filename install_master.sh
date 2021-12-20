@@ -15,12 +15,12 @@ curl -sfL https://get.k3s.io/ | K3S_KUBECONFIG_MODE="644" sh -
 mkdir /root/.kube
 cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
 
-#vi /etc/systemd/system/k3s-agent.service
 #--flannel-iface 'eth1'
 sudo sed -i '$ d' /etc/systemd/system/k3s.service
 echo -e "\t--flannel-iface 'eth1'" | sudo tee -a /etc/systemd/system/k3s.service
 
 systemctl daemon-reload
-systemctl restart k3s.service
+systemctl restart k3s
+
 #test: kubectl get node -o wide
 #TOKEN: sudo cat /var/lib/rancher/k3s/server/node-token

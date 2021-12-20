@@ -1,5 +1,7 @@
 Vagrant.configure("2") do |config|
     #Master Server
+    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/home/vagrant/.ssh/masterkey"
+    config.vm.provision "shell", inline: "cat /home/vagrant/.ssh/masterkey >> /home/vagrant/.ssh/authorized_keys"
     config.vm.synced_folder '.', '/vagrant', disabled: true
     config.vm.define "mmounchi" do |mmounchi|
       mmounchi.vm.box = "centos/8"
@@ -14,11 +16,11 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--cpus", "1"]
       end
       config.vm.provision "shell", inline: <<-SHELL
-      sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
-      systemctl restart sshd
+      echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
+      sudo systemctl restart sshd
       SHELL
-      mmounchi.vm.provision "shell", path: "install_master.sh" , run: "always"
-      config.trigger.after :up do |trigger|
+      mmounchi.vm.provision "shell", path: "install_master.sh"
+      mmounchi.trigger.after :up do |trigger|
         trigger.run = {inline: 
           'bash -c "vagrant ssh -c \"sudo cat /var/lib/rancher/k3s/server/node-token\" mmounchi > test.txt"'}
       end
@@ -36,10 +38,10 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--cpus", "1"]
       end
       config.vm.provision "shell", inline: <<-SHELL
-      sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
+      echo 'ChallengeResponseAuthentication no' >> /etc/ssh/sshd_config
       systemctl restart sshd
       SHELL
-      config.vm.provision "file", source: "~/test.txt", destination: "token.txt" , run: "always"
-      slave.vm.provision "shell", path: "install_worker.sh", run: "always"
+      slave.vm.provision "file", source: "~/test.txt", destination: "token.txt" , run: "always"
+      slave.vm.provision "shell", path: "install_worker.sh"
   end
 end
