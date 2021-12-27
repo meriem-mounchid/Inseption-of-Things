@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+	# Server
+  common = <<-SHELL
+  yum install -y kubectl
+  sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="server --no-deploy traefik" sh -
+  SHELL
+  config.vm.box = "centos/8"
+  config.vm.box_url = "centos/8"
+
+	config.vm.define "server" do |controle|
+    controle.vm.hostname = "Server"
+    controle.vm.network "private_network", ip: "192.168.42.110"
+    controle.vm.provider "virtualbox" do |v|
+      v.customize ["modifyvm", :id, "--cpus", "1"]
+      v.customize ["modifyvm", :id, "--memory", "1024"]
+      v.customize ["modifyvm", :id, "--name", "server"]
+    end
+    config.vm.provision :shell, :inline => common
+    controle.vm.provision "file", source: "app1.yaml", destination: "app1.yaml"
+    controle.vm.provision "file", source: "app2.yaml", destination: "app2.yaml"
+    controle.vm.provision "file", source: "app3.yaml", destination: "app3.yaml"
+    controle.vm.provision "file", source: "service.yaml", destination: "service.yaml"
+    controle.vm.provision "file", source: "ingress.yaml", destination: "ingress.yaml"
+    controle.vm.provision "shell", path: "run.sh"
+  end
+end
