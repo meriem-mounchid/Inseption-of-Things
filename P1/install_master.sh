@@ -1,5 +1,5 @@
 ### Master ###
-sudo su
+sudo -s
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -16,11 +16,12 @@ mkdir /root/.kube
 cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
 
 #--flannel-iface 'eth1'
-sudo sed -i '$ d' /etc/systemd/system/k3s.service
-echo -e "\t--flannel-iface 'eth1'" | sudo tee -a /etc/systemd/system/k3s.service
+sed -i '$ d' /etc/systemd/system/k3s.service
+echo -e "\t--flannel-iface 'eth1'" | tee -a /etc/systemd/system/k3s.service
 
 systemctl daemon-reload
 systemctl restart k3s
 
 #test: kubectl get node -o wide
-#TOKEN: sudo cat /var/lib/rancher/k3s/server/node-token
+#TOKEN: cat /var/lib/rancher/k3s/server/node-token
+##test: service k3s status
