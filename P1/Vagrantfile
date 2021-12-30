@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
       v.customize ["modifyvm", :id, "--name", "mmounchiS"]
     end
     config.vm.provision :shell, :inline => common
-    controle.vm.provision "shell", path: "install_master.sh"
+    controle.vm.provision "shell", path: "install_master.sh" , run: "always"
     config.trigger.after :up do |trigger|
       trigger.run = {inline: 'bash -c "vagrant ssh -c \"sudo cat /var/lib/rancher/k3s/server/node-token\" mmounchiS > ~/test.txt"'}
     end
@@ -35,6 +35,6 @@ Vagrant.configure("2") do |config|
     end
     config.vm.provision :shell, :inline => common
     control.vm.provision "file", source: "~/test.txt", destination: "token.txt"
-    control.vm.provision "shell", path: "install_worker.sh" , run: "always"
+    control.vm.provision "shell", path: "install_worker.sh"
   end
 end

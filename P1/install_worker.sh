@@ -11,5 +11,5 @@ echo -e "\t--flannel-iface 'eth1'" | tee -a /etc/systemd/system/k3s-agent.servic
 systemctl daemon-reload
 systemctl restart k3s-agent
 
-#test: sudo service k3s-agent status
+#test: service k3s-agent status
 #sudo usermod -aG wheel vagrant
