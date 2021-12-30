@@ -12,4 +12,3 @@ systemctl daemon-reload
 systemctl restart k3s-agent
 
 #test: service k3s-agent status
-#sudo usermod -aG wheel vagrant
