@@ -39,5 +39,3 @@ sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalanc
 ### ADD DEV NAMESPACE ###
 #wait till argocd ns is created then use this command
 sudo kubectl apply -f application.yaml
-
-
