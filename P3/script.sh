@@ -31,3 +31,13 @@ sudo chmod +x /usr/local/bin/argocd
 sudo kubectl create namespace argocd
 sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+### LOG IN ###
+#PASSWD:sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+#argocd login localhost:8080
+
+### ADD DEV NAMESPACE ###
+#wait till argocd ns is created then use this command
+sudo kubectl apply -f application.yaml
+
+
