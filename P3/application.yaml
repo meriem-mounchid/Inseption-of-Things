@@ -7,7 +7,7 @@ spec:
   project: default
 
   source:
-    repoURL: http://gitlab.example.com/root/gitlabbonus.git
+    repoURL: https://github.com/meriem-mounchid/argocd-app.git
     targetRevision: HEAD
     path: dev
   destination: 
