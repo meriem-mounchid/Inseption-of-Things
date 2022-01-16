@@ -1,0 +1,88 @@
+## GitLab Runner Image
+## ref: https://hub.docker.com/r/gitlab/gitlab-runner/tags/
+# image: gitlab/gitlab-runner:alpine-v11.6.0
+
+## Specify a imagePullPolicy
+imagePullPolicy: IfNotPresent
+
+## The GitLab Server URL (with protocol) that want to register the runner against
+gitlabUrl: http://10.12.100.23/
+
+## The Registration Token for adding new Runners to the GitLab Server.
+runnerRegistrationToken: "vdyMNdmtBbq2G68rx_uJ"
+
+## Unregister all runners before termination
+unregisterRunners: true
+
+## Configure the maximum number of concurrent jobs
+concurrent: 10
+
+## Defines in seconds how often to check GitLab for a new builds
+checkInterval: 30
+
+## For RBAC support:
+rbac:
+  create: true
+
+  ## Run the gitlab-bastion container with the ability to deploy/manage containers of jobs
+  ## cluster-wide or only within namespace
+  clusterWideAccess: true
+
+## Configure integrated Prometheus metrics exporter
+metrics:
+  enabled: true
+
+## Configuration for the Pods that that the runner launches for each new job
+runners:
+  ## Default container image to use for builds when none is specified
+  image: ubuntu:16.04
+
+  ## Specify whether the runner should be locked to a specific project: true, false. Defaults to true.
+  locked: false
+
+  ## Specify the tags associated with the runner. Comma-separated list of tags.
+  tags: "k8s,dev"
+
+  ## Run all containers with the privileged flag enabled
+  privileged: true
+
+  ## Namespace to run Kubernetes jobs in (defaults to the same namespace of this release)
+  namespace: gitlab
+
+  ## Distributed runners caching
+  cache: {}
+
+  ## Build Container specific configuration and limits
+  builds: {}
+
+  ## Service Container specific configuration and limits
+  services: {}
+
+  ## Helper Container specific configuration
+  helpers: {}
+
+  ## Service Account to be used for runners
+  serviceAccountName: gitlab-runner-gitlab-runner
+
+## Configure resource requests and limits
+resources: {}
+
+## Affinity for pod assignment
+affinity: {}
+
+## Node labels for pod assignment
+nodeSelector: {}
+
+## List of node taints to tolerate (requires Kubernetes >= 1.6)
+tolerations: []
+
+## Configure environment variables that will be present when the registration command runs
+envVars:
+   - name: RUNNER_EXECUTOR
+     value: kubernetes
+
+## list of hosts and IPs that will be injected into the pod's hosts file
+hostAliases: []
+
+## Annotations to be added to manager pod
+podAnnotations: {}
